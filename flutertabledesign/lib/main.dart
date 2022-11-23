@@ -1,7 +1,8 @@
 // import 'package:editable/editable.dart';
 // import 'package:flutertabledesign/provider.dart';
 // import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
+ import 'package:flutertabledesign/provider.dart';
+import 'package:provider/provider.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -165,17 +166,26 @@ import 'package:flutter/material.dart';
 
 import 'package:lazy_data_table/lazy_data_table.dart';
 
+import 'formfield.dart';
+
 void main() {
-  runApp(MaterialApp(
-    title: 'Example',
-    home: MyApp(),
+  runApp(
+    MultiProvider(
+      providers:[
+        ChangeNotifierProvider(create: (context) => ProviderValue(),)
+      ],
+    child: MaterialApp(
+      title: 'Example',
+      home: MyApp(),
+    ),
   ));
 }
 
 class MyApp extends StatelessWidget {
+  TextEditingController conroller1 = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    List  month = ["January", "February","March","Aprill","May","August","September"];
+   // List  month = ["January", "February","March","Aprill","May","August","September"];
     List name = ["sujil","aravind","nuwaid","junaid","lakshmi","abi","shuhaib"];
     List qty = ['','24','34','45','55','65','7'];
     List qty1 = ['1','24','35','','53','63','74'];
@@ -184,9 +194,7 @@ class MyApp extends StatelessWidget {
        List qty4 = ['1','24','35','78','','63','74'];
     return Scaffold(
       appBar: AppBar(title: const Text("Examples")),
-      body: Column(
-        children: <Widget>[
-      SizedBox(
+      body: SizedBox(
         height: 500,
         width: 405,
         child: LazyDataTable(
@@ -214,14 +222,18 @@ class MyApp extends StatelessWidget {
     topHeaderHeight: 50,
     leftHeaderWidth: 75,
   ),
-  topHeaderBuilder: (i) => Center(child: Text(month[i])),
+  topHeaderBuilder: (i) => Center(child: Text( Provider.of<ProviderValue>(context,listen: false).month[i])),
   leftHeaderBuilder: (i) => Center(child: Text(name[i])),
   dataCellBuilder: (i, j) {
     
     return
-     j==1?Center(child: TextFormField()
-   //Text("Cell: $i, $j")
-   ):
+     j==1?  Center(child: Formfields(index: i,)):
+  //    Center(child:
+  //     TextFormField(
+  //       controller: conroller1 ,
+  //     )
+  //  //Text("Cell: $i, $j")
+  //  ):
    j==2?Container(
       height: 50,
     width: 100,
@@ -262,8 +274,6 @@ class MyApp extends StatelessWidget {
   
   topLeftCornerWidget: const Center(child: Text("Corner")),
 ),
-      )
-        ],
       ),
     );
   }
